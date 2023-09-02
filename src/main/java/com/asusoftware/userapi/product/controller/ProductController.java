@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +24,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,9 +40,10 @@ public class ProductController {
     }
 
     @PostMapping(path = "/create", consumes = {"multipart/form-data"})
-    public ResponseEntity<Product> createProduct(@ModelAttribute CreateProductDto createProductDto,
+    public ResponseEntity<Product> createProduct(@ModelAttribute("data") CreateProductDto createProductDto,
                                                  @RequestParam("images") MultipartFile[] imageFiles) throws Exception {
         // This uses the previously discussed method for uploading multiple images with a product
+        System.out.println(createProductDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.saveProductWithImages(createProductDto, imageFiles));
     }
 
@@ -65,6 +68,12 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") UUID id) {
+        return ResponseEntity.ok(productService.getProductById(id));
+    }
+
+    /* To download files
     @GetMapping("/uploads/{filename:.+}")
     public ResponseEntity<Resource> serveImage(@PathVariable String filename) {
         Path filePath = Paths.get("uploads/products/" + filename);
@@ -77,6 +86,21 @@ public class ProductController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    } */
+
+    @GetMapping("/uploads/{filename:.+}")
+    public ResponseEntity<Resource> serveImage(@PathVariable String filename) {
+        Path filePath = Paths.get("uploads/products/" + filename);
+        Resource fileResource = new FileSystemResource(filePath);
+
+        if (fileResource.exists() || fileResource.isReadable()) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG) // Adjust content type based on your image types
+                    .body(fileResource);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 
 }

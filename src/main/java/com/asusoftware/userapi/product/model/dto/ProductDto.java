@@ -10,10 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -38,6 +35,21 @@ public class ProductDto {
         dto.setQuantity(product.getQuantity());
         dto.setCategory(product.getCategory());
         dto.setBrand(product.getBrand());
+        dto.setImages(getImageUrls(product.getImagePaths()));
         return dto;
     }
+
+    private static List<String> getImageUrls(String imagePaths) {
+        List<String> imageUrls = new ArrayList<>();
+        String[] paths = imagePaths.split(",");
+
+        String baseUrl = "http://localhost:8080/api/v1/products/uploads/"; // Adjust as needed
+
+        for (String path : paths) {
+            imageUrls.add(baseUrl + path.trim());
+        }
+
+        return imageUrls;
+    }
+
 }

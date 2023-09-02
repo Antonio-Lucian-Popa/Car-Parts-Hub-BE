@@ -2,11 +2,13 @@ package com.asusoftware.userapi.product.model.dto;
 import com.asusoftware.userapi.product.model.Brand;
 import com.asusoftware.userapi.product.model.Category;
 import com.asusoftware.userapi.product.model.Product;
+import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Getter;
 import lombok.Setter;
 
+@ToString
 @Getter
 @Setter
 public class CreateProductDto {

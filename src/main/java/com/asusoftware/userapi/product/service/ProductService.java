@@ -2,6 +2,7 @@ package com.asusoftware.userapi.product.service;
 
 import com.asusoftware.userapi.product.model.Product;
 import com.asusoftware.userapi.product.model.dto.CreateProductDto;
+import com.asusoftware.userapi.product.model.dto.ProductDto;
 import com.asusoftware.userapi.product.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -60,5 +62,10 @@ public class ProductService {
         } catch (IOException e) {
             throw new Exception("Failed to save image: " + e.getMessage());
         }
+    }
+
+    public ProductDto getProductById(UUID id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        return ProductDto.fromEntity(product);
     }
 }
