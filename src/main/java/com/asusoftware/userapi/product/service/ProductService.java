@@ -40,7 +40,6 @@ public class ProductService {
 
     public Product saveProductWithImages(CreateProductDto productDto, MultipartFile[] imageFiles) throws Exception {
         Product product = CreateProductDto.fromDto(productDto);
-        System.out.println("test");
         if (imageFiles != null && imageFiles.length > 0) {
             List<String> fileNames = new ArrayList<>();
             for (MultipartFile file : imageFiles) {

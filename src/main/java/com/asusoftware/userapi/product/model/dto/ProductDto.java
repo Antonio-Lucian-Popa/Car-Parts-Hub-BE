@@ -43,7 +43,7 @@ public class ProductDto {
         List<String> imageUrls = new ArrayList<>();
         String[] paths = imagePaths.split(",");
 
-        String baseUrl = "http://localhost:8080/api/v1/products/uploads/"; // Adjust as needed
+        String baseUrl = "https://car-parts-hub.onrender.com/api/v1/products/uploads/"; // Adjust as needed
 
         for (String path : paths) {
             imageUrls.add(baseUrl + path.trim());
