@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/carPartsHub
-    username: postgres
-    password: password
+    url: jdbc:postgresql://dpg-ckal4p6gtj9c739ugvi0-a.frankfurt-postgres.render.com:5432/carpartshub
+    username: carpartshub_user
+    password: N21wRMHnYsaNZxWVoGRsOYiLzDqZjr53
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

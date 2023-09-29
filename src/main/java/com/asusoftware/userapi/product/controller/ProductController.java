@@ -1,5 +1,7 @@
 package com.asusoftware.userapi.product.controller;
 
+import com.asusoftware.userapi.product.model.Brand;
+import com.asusoftware.userapi.product.model.Category;
 import com.asusoftware.userapi.product.model.Product;
 import com.asusoftware.userapi.product.model.dto.CreateProductDto;
 import com.asusoftware.userapi.product.model.dto.ProductDto;
@@ -43,7 +45,6 @@ public class ProductController {
     public ResponseEntity<Product> createProduct(@ModelAttribute("data") CreateProductDto createProductDto,
                                                  @RequestParam("images") MultipartFile[] imageFiles) throws Exception {
         // This uses the previously discussed method for uploading multiple images with a product
-        System.out.println(createProductDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.saveProductWithImages(createProductDto, imageFiles));
     }
 
@@ -54,6 +55,29 @@ public class ProductController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> productPage = productService.getProducts(pageable);
+
+        List<ProductDto> productDTOs = productPage.getContent().stream()
+                .map(ProductDto::fromEntity)
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("products", productDTOs);
+        response.put("currentPage", productPage.getNumber());
+        response.put("totalItems", productPage.getTotalElements());
+        response.put("totalPages", productPage.getTotalPages());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(path = "/category")
+    public ResponseEntity<Map<String, Object>> getProductsByCategory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(name = "category") List<String> category,
+            @RequestParam(name = "brand") List<String> brand
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.getProductsByCategory(pageable, category, brand);
 
         List<ProductDto> productDTOs = productPage.getContent().stream()
                 .map(ProductDto::fromEntity)

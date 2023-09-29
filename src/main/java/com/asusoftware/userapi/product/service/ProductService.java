@@ -1,5 +1,7 @@
 package com.asusoftware.userapi.product.service;
 
+import com.asusoftware.userapi.product.model.Brand;
+import com.asusoftware.userapi.product.model.Category;
 import com.asusoftware.userapi.product.model.Product;
 import com.asusoftware.userapi.product.model.dto.CreateProductDto;
 import com.asusoftware.userapi.product.model.dto.ProductDto;
@@ -17,6 +19,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -67,5 +70,17 @@ public class ProductService {
     public ProductDto getProductById(UUID id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
         return ProductDto.fromEntity(product);
+    }
+
+    public Page<Product> getProductsByCategory(Pageable pageable, List<String> categories, List<String> brands) {
+        /* List<String> categoryNames = categories.stream()
+                .map(Enum::name)
+                .toList();
+
+        List<String> brandNames = brands.stream()
+                .map(Enum::name)
+                .toList(); */
+
+        return productRepository.findAllByCategoriesAndBrands(pageable, categories, brands);
     }
 }
