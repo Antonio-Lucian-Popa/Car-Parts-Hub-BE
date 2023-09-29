@@ -6,12 +6,7 @@ import com.asusoftware.userapi.product.model.Product;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -44,6 +39,7 @@ public class ProductDto {
         String[] paths = imagePaths.split(",");
 
         String baseUrl = "https://car-parts-hub.onrender.com/api/v1/products/uploads/"; // Adjust as needed
+        System.out.println(baseUrl);
 
         for (String path : paths) {
             imageUrls.add(baseUrl + path.trim());
